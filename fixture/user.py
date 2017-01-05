@@ -6,10 +6,8 @@ class UserHelper:
         wd = self.app.wd
         wd.find_element_by_link_text("add new").click()
 
-    def create(self, user):
+    def initialize_user(self, user):
         wd = self.app.wd
-        self.open_users_page()
-        # adв new user
         wd.find_element_by_name("firstname").click()
         wd.find_element_by_name("firstname").clear()
         wd.find_element_by_name("firstname").send_keys("%s" % user.firstname)
@@ -70,13 +68,28 @@ class UserHelper:
         wd.find_element_by_name("ayear").click()
         wd.find_element_by_name("ayear").clear()
         wd.find_element_by_name("ayear").send_keys("%s" % user.ayear)
+
+    def create(self, user):
+        wd = self.app.wd
+        self.open_users_page()
+        # add new user
+        self.initialize_user(user)
         # submit of add user
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
 
-    def delete_first_user(self):
+    def delete_first(self):
         wd = self.app.wd
         # select first user
         wd.find_element_by_name("selected[]").click()
         # submit deletion
         wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
         wd.switch_to_alert().accept()
+
+    def edit_first(self, user):
+        wd = self.app.wd
+        # select first user
+        wd.find_element_by_name("selected[]").click()
+        wd.find_element_by_xpath("//table[@id='maintable']/tbody/tr[2]/td[8]/a/img").click()
+        self.initialize_user(user)
+        # submit updating
+        wd.find_element_by_name("update").click()
