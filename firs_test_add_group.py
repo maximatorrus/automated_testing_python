@@ -54,7 +54,6 @@ class firs_test_add_group(unittest.TestCase):
 
     def return_to_groups_page(self, wd):
         wd.find_element_by_link_text("group page").click()
-        wd.find_element_by_css_selector("html").click()
 
     def logout(self, wd):
         wd.find_element_by_link_text("Logout").click()
@@ -62,7 +61,6 @@ class firs_test_add_group(unittest.TestCase):
         wd.find_element_by_name("pass").send_keys("\\undefined")
         wd.find_element_by_name("user").click()
         wd.find_element_by_name("user").send_keys("\\undefined")
-        wd.find_element_by_css_selector("html").click()
 
     def test_add_group(self):
         wd = self.wd
