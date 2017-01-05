@@ -1,4 +1,3 @@
-
 class User:
 
     def __init__(self, firstname, middlename, lastname, nickname, title, company, address, telephone, mobile,

@@ -14,7 +14,7 @@ def app(request):
 
 def test_add_user(app):
     # app.open_home_page()
-    app.login(user_name="admin", password="secret")
+    app.session.login(user_name="admin", password="secret")
     app.open_add_new_page()
     app.add_new_user(User(firstname="First", middlename="Middle", lastname="Last", nickname="Nickname",
                       title="Title", company="Company", address="Address", telephone="telephone", mobile="mobile",
@@ -24,12 +24,12 @@ def test_add_user(app):
                       bmonth="//div[@id='content']/form/select[2]//option[7]",
                       aday="//div[@id='content']/form/select[3]//option[15]",
                       amonth="//div[@id='content']/form/select[4]//option[6]"))
-    app.logout()
+    app.session.logout()
 
 
 def test_add__empty_user(app):
     # app.open_home_page()
-    app.login(user_name="admin", password="secret")
+    app.session.login(user_name="admin", password="secret")
     app.open_add_new_page()
     app.add_new_user(User(firstname="", middlename="", lastname="", nickname="",
                                title="", company="", address="", telephone="",
@@ -40,4 +40,4 @@ def test_add__empty_user(app):
                                bmonth="//div[@id='content']/form/select[2]//option[1]",
                                aday="//div[@id='content']/form/select[3]//option[1]",
                                amonth="//div[@id='content']/form/select[4]//option[1]"))
-    app.logout()
+    app.session.logout()
