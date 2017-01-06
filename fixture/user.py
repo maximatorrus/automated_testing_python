@@ -77,18 +77,20 @@ class UserHelper:
         # submit of add user
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
 
+    def select_first_user(self):
+        wd = self.app.wd
+        wd.find_element_by_name("selected[]").click()
+
     def delete_first(self):
         wd = self.app.wd
-        # select first user
-        wd.find_element_by_name("selected[]").click()
+        self.select_first_user()
         # submit deletion
         wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
         wd.switch_to_alert().accept()
 
     def edit_first(self, user):
         wd = self.app.wd
-        # select first user
-        wd.find_element_by_name("selected[]").click()
+        self.select_first_user()
         wd.find_element_by_xpath("//table[@id='maintable']/tbody/tr[2]/td[8]/a/img").click()
         self.initialize_user(user)
         # submit updating
