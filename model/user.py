@@ -1,7 +1,7 @@
 class User:
 
-    def __init__(self, firstname, middlename, lastname, nickname, title, company, address, telephone, mobile,
-                     work, fax, email_, email2, email3, homepage, byear, ayear, bday, bmonth, aday, amonth):
+    def __init__(self, firstname=None, middlename=None, lastname=None, nickname=None, title=None, company=None, address=None, telephone=None, mobile=None,
+                     work=None, fax=None, email_=None, email2=None, email3=None, homepage=None, byear=None, ayear=None, bday=None, bmonth=None, aday=None, amonth=None):
         self.firstname = firstname
         self.middlename = middlename
         self.lastname = lastname
