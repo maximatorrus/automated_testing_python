@@ -19,6 +19,10 @@ class SessionHelper:
     def logout(self):
         wd = self.app.wd
         wd.find_element_by_link_text("Logout").click()
+        wd.find_element_by_name("pass").click()
+        wd.find_element_by_name("pass").send_keys("\\undefined")
+        wd.find_element_by_name("user").click()
+        wd.find_element_by_name("user").send_keys("\\undefined")
 
     def ensure_login(self, username, password):
         wd = self.app.wd
@@ -28,7 +32,8 @@ class SessionHelper:
                 return
             else:
                 self.logout()
-        self.login(username, password)
+        else:
+            self.login(username, password)
 
     def ensure_logout(self):
         wd = self.app.wd
