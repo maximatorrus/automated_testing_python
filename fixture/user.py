@@ -2,9 +2,13 @@ class UserHelper:
     def __init__(self, app):
         self.app = app
 
-    def open_users_page(self):
+    def open_new_users_page(self):
         wd = self.app.wd
         wd.find_element_by_link_text("add new").click()
+
+    def open_users_page(self):
+        wd = self.app.wd
+        wd.find_element_by_link_text("home").click()
 
     def change_field_value(self, field_name, text):
         wd = self.app.wd
@@ -45,7 +49,7 @@ class UserHelper:
 
     def create(self, user):
         wd = self.app.wd
-        self.open_users_page()
+        self.open_new_users_page()
         # add new user
         self.initialize_user(user)
         # submit of add user
@@ -57,6 +61,7 @@ class UserHelper:
 
     def delete_first(self):
         wd = self.app.wd
+        self.open_users_page()
         self.select_first_user()
         # submit deletion
         wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
@@ -64,6 +69,7 @@ class UserHelper:
 
     def edit_first(self, user):
         wd = self.app.wd
+        self.open_users_page()
         self.select_first_user()
         wd.find_element_by_xpath("//table[@id='maintable']/tbody/tr[2]/td[8]/a/img").click()
         self.initialize_user(user)
