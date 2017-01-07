@@ -12,7 +12,10 @@ def test_edit_first_user(app):
                              bmonth="//div[@id='content']/form/select[2]//option[7]",
                              aday="//div[@id='content']/form/select[3]//option[15]",
                              amonth="//div[@id='content']/form/select[4]//option[6]"))
-    app.user.edit_first(User(firstname="Second",
-                         bmonth="//div[@id='content']/form/select[2]//option[7]",
-                         aday="//div[@id='content']/form/select[3]//option[15]",
-                         amonth="//div[@id='content']/form/select[4]//option[6]"))
+    old_users = app.user.get_user_list()
+    user = User(firstname="Second")
+    user.id = old_users[0].id
+    app.user.edit_first(user)
+    new_users = app.user.get_user_list()
+    assert len(old_users) == len(new_users)
+    assert sorted(old_users, key=User.id_or_max) == sorted(new_users, key=User.id_or_max)

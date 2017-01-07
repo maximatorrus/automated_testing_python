@@ -1,3 +1,6 @@
+from model.user import User
+
+
 class UserHelper:
     def __init__(self, app):
         self.app = app
@@ -21,8 +24,9 @@ class UserHelper:
 
     def change_sel_value(self, field_name):
         wd = self.app.wd
-        if not wd.find_element_by_xpath("%s" % field_name).is_selected():
-            wd.find_element_by_xpath(field_name).click()
+        if field_name is not None:
+            if not wd.find_element_by_xpath("%s" % field_name).is_selected():
+                wd.find_element_by_xpath(field_name).click()
 
     def initialize_user(self, user):
         wd = self.app.wd
@@ -82,3 +86,15 @@ class UserHelper:
         wd = self.app.wd
         self.open_users_page()
         return len(wd.find_elements_by_name("selected[]"))
+
+    def get_user_list(self):
+        wd = self.app.wd
+        self.open_users_page()
+        users = []
+        for element in wd.find_elements_by_name("entry"):
+            cells = element.find_elements_by_tag_name("td")
+            firstname = cells[2].text
+            lastname = cells[1].text
+            id = element.find_element_by_name("selected[]").get_attribute("value")
+            users.append(User(firstname=firstname, lastname=lastname, id=id))
+        return users
