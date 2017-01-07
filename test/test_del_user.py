@@ -1,4 +1,5 @@
 from model.user import User
+from random import randrange
 
 
 def test_delete_first_user(app):
@@ -13,10 +14,11 @@ def test_delete_first_user(app):
                              aday="//div[@id='content']/form/select[3]//option[15]",
                              amonth="//div[@id='content']/form/select[4]//option[6]"))
     old_users = app.user.get_user_list()
-    app.user.delete_first()
+    index = randrange(len(old_users))
+    app.user.delete_user_by_index(index)
     assert len(old_users) - 1 == app.user.count()
     new_users = app.user.get_user_list()
-    old_users[0:1] = []
+    old_users[index:index+1] = []
     assert old_users == new_users
     assert sorted(old_users, key=User.id_or_max) == sorted(new_users, key=User.id_or_max)
 
