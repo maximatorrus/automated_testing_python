@@ -60,6 +60,7 @@ class UserHelper:
         self.initialize_user(user)
         # submit of add user
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
+        self.user_cache = None
 
     def select_first_user(self):
         wd = self.app.wd
@@ -72,6 +73,7 @@ class UserHelper:
         # submit deletion
         wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
         wd.switch_to_alert().accept()
+        self.user_cache = None
 
     def edit_first(self, user):
         wd = self.app.wd
@@ -81,20 +83,24 @@ class UserHelper:
         self.initialize_user(user)
         # submit updating
         wd.find_element_by_name("update").click()
+        self.user_cache = None
 
     def count(self):
         wd = self.app.wd
         self.open_users_page()
         return len(wd.find_elements_by_name("selected[]"))
 
+    user_cache = None
+
     def get_user_list(self):
-        wd = self.app.wd
-        self.open_users_page()
-        users = []
-        for element in wd.find_elements_by_name("entry"):
-            cells = element.find_elements_by_tag_name("td")
-            firstname = cells[2].text
-            lastname = cells[1].text
-            id = element.find_element_by_name("selected[]").get_attribute("value")
-            users.append(User(firstname=firstname, lastname=lastname, id=id))
-        return users
+        if self.user_cache is None:
+            wd = self.app.wd
+            self.open_users_page()
+            self.user_cache = []
+            for element in wd.find_elements_by_name("entry"):
+                cells = element.find_elements_by_tag_name("td")
+                firstname = cells[2].text
+                lastname = cells[1].text
+                id = element.find_element_by_name("selected[]").get_attribute("value")
+                self.user_cache.append(User(firstname=firstname, lastname=lastname, id=id))
+        return list(self.user_cache)
