@@ -15,7 +15,7 @@ def test_edit_first_user(app):
                              amonth="//div[@id='content']/form/select[4]//option[6]"))
     old_users = app.user.get_user_list()
     index = randrange(len(old_users))
-    user = User(firstname="Second")
+    user = User(firstname="Second", lastname="Second")
     user.id = old_users[index].id
     app.user.edit_user_by_index(index, user)
     new_users = app.user.get_user_list()

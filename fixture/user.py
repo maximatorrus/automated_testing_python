@@ -85,7 +85,7 @@ class UserHelper:
         wd = self.app.wd
         self.open_users_page()
         self.select_user_by_index(index)
-        wd.find_element_by_xpath("//table[@id='maintable']/tbody/tr[2]/td[8]/a/img").click()
+        wd.find_elements_by_xpath("//form[@name='MainForm']//img[@title='Edit']")[index].click()
         self.initialize_user(user)
         # submit updating
         wd.find_element_by_name("update").click()
