@@ -16,8 +16,9 @@ def test_edit_first_user(app):
     old_users = app.user.get_user_list()
     index = randrange(len(old_users))
     user = User(firstname="Second")
-    user.id = old_users[0].id
+    user.id = old_users[index].id
     app.user.edit_user_by_index(index, user)
     new_users = app.user.get_user_list()
     assert len(old_users) == len(new_users)
+    old_users[index] = user
     assert sorted(old_users, key=User.id_or_max) == sorted(new_users, key=User.id_or_max)
