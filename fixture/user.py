@@ -1,4 +1,5 @@
 from model.user import User
+import re
 
 
 class UserHelper:
@@ -91,6 +92,18 @@ class UserHelper:
         wd.find_element_by_name("update").click()
         self.user_cache = None
 
+    def open_user_view_by_index(self, index):
+        wd = self.app.wd
+        self.open_users_page()
+        self.select_user_by_index(index)
+        wd.find_elements_by_xpath("//form[@name='MainForm']//img[@title='Details']")[index].click()
+
+    def open_user_edit_by_index(self, index):
+        wd = self.app.wd
+        self.open_users_page()
+        self.select_user_by_index(index)
+        wd.find_elements_by_xpath("//form[@name='MainForm']//img[@title='Edit']")[index].click()
+
     def edit_first(self, user):
         self.edit_user_by_index(0, user)
 
@@ -111,5 +124,40 @@ class UserHelper:
                 firstname = cells[2].text
                 lastname = cells[1].text
                 id = element.find_element_by_name("selected[]").get_attribute("value")
-                self.user_cache.append(User(firstname=firstname, lastname=lastname, id=id))
+                all_phones = cells[5].text
+                address = cells[3].text
+                all_emails = cells[4].text
+                self.user_cache.append(User(firstname=firstname, lastname=lastname, id=id,
+                                            all_phones_from_home_page=all_phones, address=address,
+                                            all_emails_from_home_page=all_emails))
         return list(self.user_cache)
+
+    def get_user_info_from_edit_page(self, index):
+        wd = self.app.wd
+        self.open_user_edit_by_index(index)
+        firstname = wd.find_element_by_name("firstname").get_attribute("value")
+        lastname = wd.find_element_by_name("lastname").get_attribute("value")
+        id = wd.find_element_by_name("id").get_attribute("value")
+        telephone = wd.find_element_by_name("home").get_attribute("value")
+        mobile = wd.find_element_by_name("mobile").get_attribute("value")
+        work = wd.find_element_by_name("work").get_attribute("value")
+        secondaryphone = wd.find_element_by_name("phone2").get_attribute("value")
+        address = wd.find_element_by_name("address").get_attribute("value")
+        email1 = wd.find_element_by_name("email").get_attribute("value")
+        email2 = wd.find_element_by_name("email2").get_attribute("value")
+        email3 = wd.find_element_by_name("email3").get_attribute("value")
+        return User(firstname=firstname, lastname=lastname, id=id, telephone=telephone,
+                    mobile=mobile, work=work, secondaryphone=secondaryphone, email_=email1, email2=email2,
+                    email3=email3, address=address)
+
+    def get_user_from_view_page(self, index):
+        wd = self.app.wd
+        self.open_user_view_by_index(index)
+        text = wd.find_element_by_id("content").text
+        telephone = re.search("H: (.*)", text).group(1)
+        mobile = re.search("M: (.*)", text).group(1)
+        work = re.search("W: (.*)", text).group(1)
+        secondaryphone = re.search("P: (.*)", text).group(1)
+        return User(telephone=telephone,
+                    mobile=mobile, work=work, secondaryphone=secondaryphone)
+
