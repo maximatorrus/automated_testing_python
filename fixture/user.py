@@ -63,12 +63,28 @@ class UserHelper:
         wd.find_element_by_xpath("//div[@id='content']/form/input[21]").click()
         self.user_cache = None
 
+    def select_user_by_id(self, id):
+        wd = self.app.wd
+        row = wd.find_element_by_css_selector("input[value='%s']" % id).find_element_by_xpath("./../..")
+        cell = row.find_elements_by_tag_name("td")[7]
+        cell.find_element_by_tag_name("a").click()
+
     def select_user_by_index(self, index):
         wd = self.app.wd
         wd.find_elements_by_name("selected[]")[index].click()
 
     def select_first_user(self):
         self.select_user_by_index(0)
+
+    def delete_user_by_id(self, id):
+        wd = self.app.wd
+        self.open_users_page()
+        self.select_user_by_id(id)
+        # submit deletion
+        wd.find_element_by_xpath("//div[@id='content']/form[2]/div[2]/input").click()
+        wd.switch_to_alert().accept()
+        self.open_users_page()
+        self.user_cache = None
 
     def delete_user_by_index(self, index):
         wd = self.app.wd
@@ -81,6 +97,15 @@ class UserHelper:
 
     def delete_first(self):
         self.delete_user_by_index(0)
+
+    def edit_user_by_id(self, id, user):
+        wd = self.app.wd
+        self.open_users_page()
+        self.select_user_by_id(id)
+        self.initialize_user(user)
+        # submit updating
+        wd.find_element_by_name("update").click()
+        self.user_cache = None
 
     def edit_user_by_index(self, index, user):
         wd = self.app.wd
